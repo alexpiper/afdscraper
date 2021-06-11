@@ -99,7 +99,7 @@ get_afd_children <- function(taxon){
 #' Get occurance data from the Australian Faunal Directory
 #'
 #' @param taxon (Character) A query taxon
-#' @param return The type of occurance data to return. Options are "states" for just the state occurance data,
+#' @param occurance The type of occurance data to return. Options are "states" for just the state occurance data,
 #' or "ibra" for Australia's Bioregions occurance data (see https://www.environment.gov.au/land/nrs/science/ibra)
 #'
 #' @return
@@ -114,9 +114,9 @@ get_afd_children <- function(taxon){
 #' @importFrom purrr pluck
 #'
 #' @examples
-get_afd_occurance <- function(taxon, return="states"){
+get_afd_occurance <- function(taxon, occurance="states"){
   taxon <- check_afd_name(taxon)
-  if(is.null(taxon)){
+  if(is.null(taxon) | length(taxon) < 1){
     return(NA)
   }
   url <- paste0("https://biodiversity.org.au/afd/taxa/", taxon)
@@ -125,10 +125,20 @@ get_afd_occurance <- function(taxon, return="states"){
     rvest::html_nodes('h4, p')
 
   #get the index of the p div to pluck
-  if(stringr::str_to_lower(return) == "states"){
+  if(stringr::str_to_lower(occurance) == "states"){
     index <- which(query_data %>% rvest::html_text() =="States") + 1
-  } else if(stringr::str_to_lower(return) == "ibra"){
+    if(length(index)== 0){
+      # If its cosmopolitan its put in a different div for some reason
+      index <- which(query_data %>% rvest::html_text() =="Extra Distribution Information") + 1
+    }
+  } else if(stringr::str_to_lower(occurance) == "ibra"){
     index <- which(query_data %>% rvest::html_text() =="IBRA") + 1
+  } else {
+    message("occurance must be either 'states' or 'ibra'")
+  }
+  if (!length(index) > 0){
+    message("No occurance data available for: ", taxon)
+    return(NA)
   }
   # pull out the index line and clean
   dist_data <- query_data %>%
@@ -168,10 +178,15 @@ get_afd_occurance <- function(taxon, return="states"){
 #' @importFrom stringr str_detect
 #' @importFrom stringr str_remove
 #' @importFrom stringr str_remove_all
+#' @importFrom stringr str_to_lower
 #' @importFrom tibble rownames_to_column
 #'
 #' @examples
 check_afd_name <- function(taxon){
+  if(!is.null(attr(taxon, "valid_name"))){
+    return(taxon)
+  }
+  taxon <- taxon %>% stringr::str_replace_all("_", " ")
   if(stringr::str_detect(taxon, " ")){
     taxon <- taxon %>% stringr::str_replace_all(" ", "%25")
   }
@@ -230,7 +245,7 @@ check_afd_name <- function(taxon){
       dplyr::mutate(rank_n = match(Rank, possible_ranks)) %>%
       dplyr::filter(Status == "Valid Name") %>%
       dplyr::mutate(name_check = purrr::map(Name, function(x){
-        all(stringr::str_detect(x, paste0("\\b", name_check, "\\b")))
+        all(stringr::str_detect(stringr::str_to_lower(x), paste0("\\b", stringr::str_to_lower(name_check), "\\b")))
       })) %>%
       tidyr::unnest(name_check) %>%
       dplyr::filter(name_check) %>%

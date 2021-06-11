@@ -4,12 +4,12 @@
 \alias{get_afd_occurance}
 \title{Get occurance data from the Australian Faunal Directory}
 \usage{
-get_afd_occurance(taxon, return = "states")
+get_afd_occurance(taxon, occurance = "states")
 }
 \arguments{
 \item{taxon}{(Character) A query taxon}
 
-\item{return}{The type of occurance data to return. Options are "states" for just the state occurance data,
+\item{occurance}{The type of occurance data to return. Options are "states" for just the state occurance data,
 or "ibra" for Australia's Bioregions occurance data (see https://www.environment.gov.au/land/nrs/science/ibra)}
 }
 \value{
