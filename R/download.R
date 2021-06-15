@@ -210,7 +210,6 @@ check_afd_name <- function(taxon){
   if(table_header[1] == "Published"){
     # taxon is valid and unique
     out <- taxon
-
   } else if (table_header[1] == "Rank"){
     # taxon is not unique
     table_data <- rvest::read_html(url) %>%
@@ -240,12 +239,30 @@ check_afd_name <- function(taxon){
       stringr::str_replace("%[0-9]+", "_") %>%
       stringr::str_split(pattern="_", n=Inf) %>%
       unlist()
+
+    if(any(table_data$Status == "Valid Name")){
+      # At least one returned name is valid
+      valid_name <- TRUE
+    } else if(!any(table_data$Status == "Valid Name") & any(stringr::str_detect(table_data$Status, "Generic Combination"))){
+      # Returned name is generic combination (synonym)
+      valid_name <- FALSE
+    } else{
+      return(NULL)
+    }
+
     index_to_keep <- table_data %>%
       tibble::rownames_to_column("index") %>%
       dplyr::mutate(rank_n = match(Rank, possible_ranks)) %>%
-      dplyr::filter(Status == "Valid Name") %>%
+      dplyr::filter(dplyr::case_when(
+        valid_name ~ Status == "Valid Name",
+        !valid_name ~ stringr::str_detect(table_data$Status, "Generic Combination")
+      ))%>%
       dplyr::mutate(name_check = purrr::map(Name, function(x){
-        all(stringr::str_detect(stringr::str_to_lower(x), paste0("\\b", stringr::str_to_lower(name_check), "\\b")))
+        if(valid_name){
+          all(stringr::str_detect(stringr::str_to_lower(x), paste0("\\b", stringr::str_to_lower(name_check), "\\b")))
+        } else {
+          any(stringr::str_detect(stringr::str_to_lower(x), paste0("\\b", stringr::str_to_lower(name_check), "\\b")))
+        }
       })) %>%
       tidyr::unnest(name_check) %>%
       dplyr::filter(name_check) %>%
