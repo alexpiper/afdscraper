@@ -26,7 +26,7 @@ fetch_afd_checklist <- function(taxon, retry_attempt=3, retry_wait=5, quiet=FALS
   if(length(need_child) > 0){
     to_download <- list()
   } else {
-    to_download <- query
+    to_download <- taxon
   }
 
   while(length(need_child) > 0){
@@ -318,7 +318,8 @@ check_afd_query <- function(taxon, check_name = TRUE){
 #'
 #' @return
 #' @importFrom readr read_csv
-#' @importFrom readr cols
+#' @importFrom janitor clean_names
+#' @import readr
 #'
 #'
 #' @examples
@@ -381,8 +382,8 @@ fetch_afd_csv <- function(taxon, retry_attempt=3, retry_wait=5, quiet=FALSE, che
         NULL
       })
       if(!is.null(csv)){
-        out <- csv
-
+        out <- csv %>%
+          janitor::clean_names()
       }else {
         attempt <- attempt + 1
       }
