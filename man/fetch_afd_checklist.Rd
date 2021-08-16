@@ -13,7 +13,8 @@ fetch_afd_checklist(taxa, retry_attempt = 3, retry_wait = 5, quiet = FALSE)
 
 \item{retry_wait}{(Integer) How long to wait between query attempts.}
 
-\item{quiet}{(Logical) Option to print warnings to console}
+\item{quiet}{(Logical) Option to print warnings to console
+]}
 }
 \value{
 A dataframe containing checklist data for a taxon, or a list of data frames if multiple taxon names were provided.

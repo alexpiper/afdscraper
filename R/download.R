@@ -5,7 +5,7 @@
 #' @param retry_attempt (Integer) The number of query attempts in case of query failure due to poor internet connection.
 #' @param retry_wait (Integer) How long to wait between query attempts.
 #' @param quiet (Logical) Option to print warnings to console
-#'
+#']
 #' @return A dataframe containing checklist data for a taxon, or a list of data frames if multiple taxon names were provided.
 #' @export
 #' @importFrom purrr map
@@ -59,6 +59,9 @@ fetch_afd_checklist <- function(taxa, retry_attempt=3, retry_wait=5, quiet=FALSE
     # Retrieve CSV files
     out[[index]] <- to_download %>%
       purrr::map_dfr(fetch_afd_csv, retry_attempt = retry_attempt, retry_wait=retry_wait, quiet=quiet, check_name=FALSE)
+  }
+  if(is(out, "list") & !length(out) > 1){
+    out <- out[[1]]
   }
   return(out)
 }
@@ -134,8 +137,7 @@ get_afd_children <- function(taxa, quiet=FALSE){
     }
   }
   if(is(out, "list") & !length(out) > 1){
-    out <- unlist(out)
-    names(out) <- NULL
+    out <- out[[1]]
   }
   return(out)
 }
@@ -221,7 +223,6 @@ get_afd_occurance <- function(taxa, type="states", quiet=FALSE){
 #' @param quiet (Logical) Option to print warnings to console
 #'
 #' @return (character) A character vector of the same length as `taxa` containing the valid taxonomic name/s on AFD, or NULL if the name was not found.
-#' @export
 #' @importFrom rvest read_html
 #' @importFrom rvest html_nodes
 #' @importFrom rvest html_text
@@ -366,7 +367,7 @@ check_afd_presence <- function(taxa, quiet=FALSE) {
   for(i in 1:length(dupvec)){
     index <- dupvec[[i]]
     to_search <- names(dupvec[i])
-    out[index] <- !is.null(check_afd_name(to_search), quiet=quiet)
+    out[index] <- !is.null(check_afd_name(to_search, quiet=quiet))
   }
   return(out)
 }
