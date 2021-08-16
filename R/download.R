@@ -11,6 +11,7 @@
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
 #' @importFrom dplyr pull
+#' @importFrom methods is
 #'
 #'
 #' @examples
@@ -60,7 +61,7 @@ fetch_afd_checklist <- function(taxa, retry_attempt=3, retry_wait=5, quiet=FALSE
     out[[index]] <- to_download %>%
       purrr::map_dfr(fetch_afd_csv, retry_attempt = retry_attempt, retry_wait=retry_wait, quiet=quiet, check_name=FALSE)
   }
-  if(is(out, "list") & !length(out) > 1){
+  if(methods::is(out, "list") & !length(out) > 1){
     out <- out[[1]]
   }
   return(out)
@@ -417,7 +418,6 @@ check_afd_query <- function(taxon, check_name = TRUE){
 #' @importFrom readr read_csv
 #' @importFrom janitor clean_names
 #' @import readr
-#'
 #'
 #' @examples
 fetch_afd_csv <- function(taxon, retry_attempt=3, retry_wait=5, quiet=FALSE, check_name=TRUE){

@@ -19,8 +19,10 @@ Imports:
     janitor,
     jsonlite,
     magrittr,
+    methods,
     purrr,
     readr,
     rvest,
     stringr,
-    tibble
+    tibble,
+    tidyr
