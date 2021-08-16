@@ -4,19 +4,19 @@
 \alias{fetch_afd_checklist}
 \title{Fetch data from the Australian Faunal Directory}
 \usage{
-fetch_afd_checklist(taxon, retry_attempt = 3, retry_wait = 5, quiet = FALSE)
+fetch_afd_checklist(taxa, retry_attempt = 3, retry_wait = 5, quiet = FALSE)
 }
 \arguments{
-\item{taxon}{(Character) A query taxon}
+\item{taxa}{(Character) A query taxonomic name, or vector of taxonomic names}
 
 \item{retry_attempt}{(Integer) The number of query attempts in case of query failure due to poor internet connection.}
 
 \item{retry_wait}{(Integer) How long to wait between query attempts.}
 
-\item{quiet}{(Logical) Whether the function should print progress to console.}
+\item{quiet}{(Logical) Option to print warnings to console}
 }
 \value{
-A dataframe containing
+A dataframe containing checklist data for a taxon, or a list of data frames if multiple taxon names were provided.
 }
 \description{
 Fetch data from the Australian Faunal Directory

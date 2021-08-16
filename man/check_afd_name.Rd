@@ -4,13 +4,15 @@
 \alias{check_afd_name}
 \title{Check if name is valid on the Australian Faunal Directory}
 \usage{
-check_afd_name(taxon)
+check_afd_name(taxa, quiet = FALSE)
 }
 \arguments{
-\item{taxon}{(Character) A query taxon}
+\item{taxa}{(Character) A query taxonomic name, or vector of taxonomic names}
+
+\item{quiet}{(Logical) Option to print warnings to console}
 }
 \value{
-(character) A valid taxon name
+(character) A character vector of the same length as \code{taxa} containing the valid taxonomic name/s on AFD, or NULL if the name was not found.
 }
 \description{
 Check if name is valid on the Australian Faunal Directory

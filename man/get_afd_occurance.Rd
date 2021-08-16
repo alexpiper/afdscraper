@@ -4,16 +4,18 @@
 \alias{get_afd_occurance}
 \title{Get occurance data from the Australian Faunal Directory}
 \usage{
-get_afd_occurance(taxon, occurance = "states")
+get_afd_occurance(taxa, type = "states", quiet = FALSE)
 }
 \arguments{
-\item{taxon}{(Character) A query taxon}
+\item{taxa}{(Character) A query taxonomic name, or vector of taxonomic names}
 
-\item{occurance}{The type of occurance data to return. Options are "states" for just the state occurance data,
+\item{type}{The type of occurance data to return. Options are "states" for just the state occurance data,
 or "ibra" for Australia's Bioregions occurance data (see https://www.environment.gov.au/land/nrs/science/ibra)}
+
+\item{quiet}{(Logical) Option to print warnings to console}
 }
 \value{
-
+A character vector containing taxonomic children data for a taxon, or a list of character vectors if multiple taxon names were provided.
 }
 \description{
 Get occurance data from the Australian Faunal Directory

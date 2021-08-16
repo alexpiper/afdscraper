@@ -2,6 +2,7 @@
 
 export("%>%")
 export(check_afd_name)
+export(check_afd_presence)
 export(fetch_afd_checklist)
 export(get_afd_children)
 export(get_afd_occurance)

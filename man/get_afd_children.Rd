@@ -4,13 +4,15 @@
 \alias{get_afd_children}
 \title{Retrieve the immediate children of a query taxa}
 \usage{
-get_afd_children(taxon)
+get_afd_children(taxa, quiet = FALSE)
 }
 \arguments{
-\item{taxon}{(Character) A query taxon}
+\item{taxa}{(Character) A query taxonomic name, or vector of taxonomic names}
+
+\item{quiet}{(Logical) Option to print warnings to console}
 }
 \value{
-a dataframe containing child data
+A dataframe containing taxonomic children data for a taxon, or a list of data frames if multiple taxon names were provided.
 }
 \description{
 Retrieve the immediate children of a query taxa

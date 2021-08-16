@@ -2,7 +2,7 @@
 % Please edit documentation in R/download.R
 \name{check_afd_query}
 \alias{check_afd_query}
-\title{Check query is not too large for the AFD server}
+\title{Internal function to check that query is not too large for AFD server}
 \usage{
 check_afd_query(taxon, check_name = TRUE)
 }
@@ -15,5 +15,5 @@ check_afd_query(taxon, check_name = TRUE)
 a valid URL query, or FALSE if the query is too large
 }
 \description{
-Check query is not too large for the AFD server
+Internal function to check that query is not too large for AFD server
 }
