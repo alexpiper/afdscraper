@@ -340,7 +340,9 @@ check_afd_name <- function(taxa, quiet=FALSE){
         dplyr::slice_min(rank_n) %>%
         dplyr::pull(index) %>%
         as.numeric()
-
+      if(length(index_to_keep) == 0){
+        return(NULL)
+      }
       out[index] <- stringr::str_remove(rows[index_to_keep], "../taxa/")
     }
   }
